@@ -7,9 +7,9 @@
 **************************************************************************/
 
 /*directory*/
-%let dir=C:\Users\laura.collett\Documents\Coding\SAS\tableMacros\freqMacro;
+%let dir=P:\LSTM\SAS\frecMacro;
 /*macros*/
-%include "&dir\totrow_v2.1.sas";
+%include "&dir\totrow.sas";
 %include "&dir\procs.sas";
 
 /*main macro*/
@@ -68,11 +68,6 @@ run;
           call symput("catf",vformatn(&catvar));
           call symput("catlab",vlabel(&catvar));
           call symput("cflen",cat(vformatw(&catvar),".",vformatd(&catvar)));
-          /*TREATMENT VARIABLE SETTINGS*/
-          %if &trtvar~= %then %do;
-            tf=vformatn(&trtvar);
-            call symput("trtf",vformatn(&trtvar));
-          %end;
           /*SEE WHETHER CATEGORICAL OR CONTINUOUS*/
           if cf="F" or cf="BEST" then call symput("cont",1);
           else call symput("cont",0);
@@ -130,10 +125,8 @@ run;
           call symput("catlab",vlabel(&catvar));
           call symput("cflen",cat(vformatw(&catvar),".",vformatd(&catvar)));
           /*TREATMENT VARIABLE SETTINGS*/
-          %if &trtvar~= %then %do;
-            tf=vformatn(&trtvar);
-            call symput("trtf",vformatn(&trtvar));
-          %end;
+          tf=vformatn(&trtvar);
+          call symput("trtf",vformatn(&trtvar));
           /*SEE WHETHER CATEGORICAL OR CONTINUOUS*/
           if cf="F" or cf="BEST" then call symput("cont",1);
           else call symput("cont",0);
