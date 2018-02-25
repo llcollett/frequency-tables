@@ -3,7 +3,8 @@
 Code written as part of role at Leeds Institute of Clinical Trials Research in order to produce summary tables of patient characteristics by trial arm and overall.
 
 ```
-macro freqany(dset=,catvar=,catall=,catsort=catformat,trtvar=,trtall=,tot=,header=n,library=library,tabout=,debug=n);
+macro freqany(dset=,catvar=,catall=,catsort=catformat,trtvar=,trtall=,tot=,header=n,library=library,
+              tabout=,debug=n);
 /*dset=	input dataset
   catvar= categorical variable to summarise
   catall= y or n, depending on whether you want to output frequencies for all levels of the categorical 
@@ -28,26 +29,31 @@ macro freqany(dset=,catvar=,catall=,catsort=catformat,trtvar=,trtall=,tot=,heade
   debug= y or n, n is [DEFAULT], option to debug if necessary*/
 ```
  
-Worked example:
+###Worked example:
 
 ```
-/*libraries*/
 libname x "P:\CTRU\Stats\Programming\SAS\Programs\Analytical techniques\TableMacros2017\";
 libname library "P:\CTRU\Stats\Programming\SAS\Programs\Analytical techniques\TableMacros2017\";
+%let path=path;
 %inc "P:\CTRU\Stats\Programming\SAS\Programs\Analytical techniques\TableMacros2017\freqmacro_v2.sas";
 %inc "P:\CTRU\Stats\Programming\SAS\Programs\Analytical techniques\TableMacros2017\totrowmacro_v2.sas";
 %inc "P:\CTRU\Stats\Programming\SAS\Programs\Analytical techniques\TableMacros2017\unimacro_v2.sas";
-/*defines directory*/
+```
+###Defines directory:
+```
 %let dir=P:\CTRU\Stats\Programming\SAS\Programs\Analytical techniques\TableMacros2017\;
-
-/*formats*/
+```
+###Formats:
+```
 proc format library=library; 
   value gender 1="Male" 2="Female"; 
   value trt3tx 1="Treatment A" 2="Treatment B" 3="Treatment C"; 
 run;
 proc format library=library cntlout=formats;
 run;
-/*data*/
+```
+###Data:
+```
 data ex1;
   input patno age gender trt;
   datalines;
@@ -71,11 +77,13 @@ data ex2;
 		trt="Randomised Treatment";
   format gender gender. trt trt3tx.;
 run;
-
-/*macro*/
+```
+Macro:
+```
 %freqany(dset=ex2,catvar=gender,catall=n,trtvar=trt,trtall=y,tot=y,header=y,tabout=_extable);
-
-/*ods output specifying ctru style and filename*/
+```
+###ODS output specifying style and filename:
+```
 ods rtf file="&dir\_extable.rtf" bodytitle style=ctru; 
 options papersize="A4" orientation="portrait";
 ods escapechar='^'; footnote;
@@ -102,12 +110,12 @@ proc report data=_extable headskip nowindows split="#"
   "This is a wonderfully lovely table";
 run;
 ods rtf close;
-
-/*saves log with name of executing sas filename*/
+```
+###Saves log with name executing as filename:
+```
 %let filename=%sysget(sas_execfilename);
-dm 'output; file "P:\CTRU\Stats\Programming\SAS\Programs\Analytical techniques\TableMacros2017\&filename..lst" replace;'; 
-dm 'log; file "P:\CTRU\Stats\Programming\SAS\Programs\Analytical techniques\TableMacros2017\&filename..log" replace;'; 
-
+dm 'output; file "&path\&filename..lst" replace;'; 
+dm 'log; file "&path\&filename..log" replace;'; 
 ```
 
 
